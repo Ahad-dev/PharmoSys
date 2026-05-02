@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PharmoSys.Models
+namespace PharmoSys.Data.Entities
 {
-    class Role
+    class RoleEntity
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int RoleId { get; set; }
         public string RoleName { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<UserEntity> Users { get; set; }
     }
 }

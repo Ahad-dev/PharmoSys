@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PharmoSys.Migrations
+namespace PharmoSys.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

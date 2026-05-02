@@ -1,20 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PharmoSys.Models;
+using PharmoSys.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PharmoSys.Data
+namespace PharmoSys.Data.Context
 {
-    class PharmoSysDbContext:DbContext
+    internal class PharmoSysDbContext:DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<Sale> Sales { get; set; }
-        public DbSet<SaleItem> SaleItems { get; set; }
-        public DbSet<StockHistory> StockHistories { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<SupplierEntity> Suppliers { get; set; }
+        public DbSet<SaleEntity> Sales { get; set; }
+        public DbSet<SaleItemEntity> SaleItems { get; set; }
+        public DbSet<StockHistoryEntity> StockHistories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,37 +25,37 @@ namespace PharmoSys.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Roles → Users (1 to many)
-            modelBuilder.Entity<Role>()
+            modelBuilder.Entity<RoleEntity>()
                 .HasMany(r => r.Users)
                 .WithOne(u => u.Role)
                 .HasForeignKey(u => u.RoleId);
 
             // Suppliers → Products (1 to many)
-            modelBuilder.Entity<Supplier>()
+            modelBuilder.Entity<SupplierEntity>()
                 .HasMany(s => s.Products)
                 .WithOne(p => p.Supplier)
                 .HasForeignKey(p => p.SupplierId);
 
             // Users → Sales (1 to many)
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<UserEntity>()
                 .HasMany(u => u.Sales)
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId);
 
             // Sales → SaleItems (1 to many)
-            modelBuilder.Entity<Sale>()
+            modelBuilder.Entity<SaleEntity>()
                 .HasMany(s => s.SaleItems)
                 .WithOne(si => si.Sale)
                 .HasForeignKey(si => si.SaleId);
 
             // Products → SaleItems (1 to many)
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<ProductEntity>()
                 .HasMany(p => p.SaleItems)
                 .WithOne(si => si.Product)
                 .HasForeignKey(si => si.ProductId);
 
             // Products → StockHistory (1 to many)
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<ProductEntity>()
                 .HasMany(p => p.StockHistories)
                 .WithOne(sh => sh.Product)
                 .HasForeignKey(sh => sh.ProductId);

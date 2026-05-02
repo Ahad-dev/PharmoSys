@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PharmoSys.Data;
+using PharmoSys.Data.Context;
 
 #nullable disable
 
-namespace PharmoSys.Migrations
+namespace PharmoSys.Data.Migrations
 {
     [DbContext(typeof(PharmoSysDbContext))]
-    [Migration("20260501142917_InitialCreate")]
-    partial class InitialCreate
+    partial class PharmoSysDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +22,7 @@ namespace PharmoSys.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PharmoSys.Models.Product", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.ProductEntity", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -63,7 +60,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Role", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.RoleEntity", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -80,7 +77,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Sale", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SaleEntity", b =>
                 {
                     b.Property<int>("SaleId")
                         .ValueGeneratedOnAdd()
@@ -117,7 +114,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("Sales");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.SaleItem", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SaleItemEntity", b =>
                 {
                     b.Property<int>("SaleItemId")
                         .ValueGeneratedOnAdd()
@@ -149,7 +146,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("SaleItems");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.StockHistory", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.StockHistoryEntity", b =>
                 {
                     b.Property<int>("StockId")
                         .ValueGeneratedOnAdd()
@@ -177,7 +174,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("StockHistories");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Supplier", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SupplierEntity", b =>
                 {
                     b.Property<int>("SupplierId")
                         .ValueGeneratedOnAdd()
@@ -202,7 +199,7 @@ namespace PharmoSys.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.User", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.UserEntity", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -239,9 +236,9 @@ namespace PharmoSys.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Product", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.ProductEntity", b =>
                 {
-                    b.HasOne("PharmoSys.Models.Supplier", "Supplier")
+                    b.HasOne("PharmoSys.Data.Entities.SupplierEntity", "Supplier")
                         .WithMany("Products")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -250,9 +247,9 @@ namespace PharmoSys.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Sale", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SaleEntity", b =>
                 {
-                    b.HasOne("PharmoSys.Models.User", "User")
+                    b.HasOne("PharmoSys.Data.Entities.UserEntity", "User")
                         .WithMany("Sales")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -261,15 +258,15 @@ namespace PharmoSys.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.SaleItem", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SaleItemEntity", b =>
                 {
-                    b.HasOne("PharmoSys.Models.Product", "Product")
+                    b.HasOne("PharmoSys.Data.Entities.ProductEntity", "Product")
                         .WithMany("SaleItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PharmoSys.Models.Sale", "Sale")
+                    b.HasOne("PharmoSys.Data.Entities.SaleEntity", "Sale")
                         .WithMany("SaleItems")
                         .HasForeignKey("SaleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -280,9 +277,9 @@ namespace PharmoSys.Migrations
                     b.Navigation("Sale");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.StockHistory", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.StockHistoryEntity", b =>
                 {
-                    b.HasOne("PharmoSys.Models.Product", "Product")
+                    b.HasOne("PharmoSys.Data.Entities.ProductEntity", "Product")
                         .WithMany("StockHistories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -291,9 +288,9 @@ namespace PharmoSys.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.User", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.UserEntity", b =>
                 {
-                    b.HasOne("PharmoSys.Models.Role", "Role")
+                    b.HasOne("PharmoSys.Data.Entities.RoleEntity", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -302,29 +299,29 @@ namespace PharmoSys.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Product", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.ProductEntity", b =>
                 {
                     b.Navigation("SaleItems");
 
                     b.Navigation("StockHistories");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Role", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.RoleEntity", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Sale", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SaleEntity", b =>
                 {
                     b.Navigation("SaleItems");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.Supplier", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.SupplierEntity", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("PharmoSys.Models.User", b =>
+            modelBuilder.Entity("PharmoSys.Data.Entities.UserEntity", b =>
                 {
                     b.Navigation("Sales");
                 });

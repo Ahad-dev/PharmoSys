@@ -7,6 +7,27 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <!-- SIDEBAR -->
+        <StackPanel Background="#2C3E50">
+
+            <Button Content="Dashboard"
+                    Command="{Binding ShowDashboardCommand}"/>
+
+            <Button Content="POS"
+                    Command="{Binding ShowPOSCommand}"/>
+
+            <Button Content="Products"
+                    Command="{Binding ShowProductsCommand}"/>
+
+        </StackPanel>
+
+        <!-- MAIN CONTENT AREA -->
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentView}"/>
     </Grid>
 </Window>

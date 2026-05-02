@@ -22,8 +22,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
+    <Folder Include="Core\DTOs\" />
+    <Folder Include="Core\Mappers\" />
+    <Folder Include="Core\Interfaces\" />
+    <Folder Include="Data\Repositories\" />
+    <Folder Include="ViewModels\Auth\" />
+    <Folder Include="ViewModels\Stock\" />
+    <Folder Include="ViewModels\Reports\" />
+    <Folder Include="ViewModels\User\" />
+    <Folder Include="Views\Auth\" />
+    <Folder Include="Views\Reports\" />
+    <Folder Include="Views\Stock\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
 
 </Project>

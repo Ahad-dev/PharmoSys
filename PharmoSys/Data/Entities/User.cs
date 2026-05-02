@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace PharmoSys.Models
+namespace PharmoSys.Data.Entities
 {
-    class User
+    class UserEntity
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int UserId { get; set; }
 
         public string Username { get; set; }
@@ -16,11 +17,11 @@ namespace PharmoSys.Models
         public string Phone { get; set; }
 
         public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public RoleEntity Role { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<Sale> Sales { get; set; }
+        public ICollection<SaleEntity> Sales { get; set; }
 
     }
 }

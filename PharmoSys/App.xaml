@@ -2,8 +2,29 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PharmoSys"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             xmlns:dashVM="clr-namespace:PharmoSys.ViewModels.Dashboard"
+             xmlns:posVM="clr-namespace:PharmoSys.ViewModels.POS"
+             xmlns:productVM="clr-namespace:PharmoSys.ViewModels.Products"
+             xmlns:dashViews="clr-namespace:PharmoSys.Views.Dashboard"
+             xmlns:posViews="clr-namespace:PharmoSys.Views.POS"
+             xmlns:productViews="clr-namespace:PharmoSys.Views.Products"
+
+             >
+    
     <Application.Resources>
-         
+
+        <DataTemplate DataType="{x:Type dashVM:DashboardViewModel}">
+            <dashViews:DashboardView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type posVM:POSViewModel}">
+            <posViews:POSView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type productVM:ProductViewModel}">
+            <productViews:ProductView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
