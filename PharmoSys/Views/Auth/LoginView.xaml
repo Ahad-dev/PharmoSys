@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmoSys.Views.Auth"
         mc:Ignorable="d"
-        Title="PharmoSys Login" Height="400" Width="400"
+        Title="PharmoSys Login" Height="480" Width="400"
+        SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
     <Border Background="{StaticResource SurfaceBrush}">

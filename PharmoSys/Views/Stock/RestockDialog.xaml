@@ -1,58 +1,111 @@
 <Window x:Class="PharmoSys.Views.Stock.RestockDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Restock Product" Height="280" Width="380"
+        Title="Restock Product" Height="Auto" Width="440"
+        SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
         FontFamily="Segoe UI">
 
-    <Window.Resources>
-        <Style TargetType="TextBlock" x:Key="LabelStyle">
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#2C3E50"/>
-            <Setter Property="Margin" Value="0,8,0,3"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="8,6"/>
-            <Setter Property="BorderBrush" Value="#BDC3C7"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Padding" Value="8,6"/>
-        </Style>
-    </Window.Resources>
+    <Border Background="{StaticResource SurfaceBrush}"
+            CornerRadius="12"
+            BorderBrush="#D5DDE8"
+            BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect Color="#1A2A3A" BlurRadius="30" ShadowDepth="8" Opacity="0.22" Direction="270"/>
+        </Border.Effect>
 
-    <Border Background="White" Padding="24">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Title -->
-            <TextBlock Grid.Row="0" Text="📦 Restock Product" FontSize="20" FontWeight="Bold"
-                       Foreground="#16A085" Margin="0,0,0,16"/>
+            <!-- Teal Accent Header -->
+            <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="12,12,0,0" Padding="24,18">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="📦" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <StackPanel>
+                            <TextBlock Text="Restock Product" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="Add stock quantity to selected product"
+                                       FontSize="12" Foreground="#B2DFDB" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!-- Close Button -->
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Click="Cancel_Click"
+                            Background="Transparent" BorderThickness="0"
+                            Foreground="White" FontSize="16" Cursor="Hand"
+                            Width="30" Height="30" Content="✕"
+                            ToolTip="Close"/>
+                </Grid>
+            </Border>
 
             <!-- Form Fields -->
-            <StackPanel Grid.Row="1">
-                <TextBlock Text="Select Product *" Style="{StaticResource LabelStyle}"/>
-                <ComboBox ItemsSource="{Binding Products}"
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedProduct}"/>
+            <StackPanel Grid.Row="1" Margin="24,20,24,0">
 
-                <TextBlock Text="Quantity to Add *" Style="{StaticResource LabelStyle}"/>
-                <TextBox Text="{Binding QuantityToAdd, UpdateSourceTrigger=PropertyChanged}"/>
+                <!-- Product ComboBox -->
+                <TextBlock Text="Product" FontSize="13" FontWeight="SemiBold"
+                           Foreground="#4A5568" Margin="0,0,0,6"/>
+                <Border BorderBrush="#D5DDE8" BorderThickness="1" CornerRadius="8">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#16A085"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <ComboBox ItemsSource="{Binding Products}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding SelectedProduct}"
+                              Background="White"
+                              BorderThickness="0"
+                              Padding="12,10"
+                              FontSize="14"
+                              FontFamily="Segoe UI"/>
+                </Border>
+
+                <!-- Quantity TextBox -->
+                <TextBlock Text="Quantity to Add" FontSize="13" FontWeight="SemiBold"
+                           Foreground="#4A5568" Margin="0,16,0,6"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Prefix Label -->
+                    <Border Grid.Column="0" Background="#EEF3F7" BorderBrush="#D5DDE8"
+                            BorderThickness="1,1,0,1" CornerRadius="8,0,0,8" Padding="12,0">
+                        <TextBlock Text="QTY" VerticalAlignment="Center" FontSize="12"
+                                   FontWeight="Bold" Foreground="#16A085"/>
+                    </Border>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding QuantityToAdd, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource ModernTextBox}"
+                             FontSize="15"
+                             FontWeight="SemiBold"/>
+                </Grid>
             </StackPanel>
 
-            <!-- Action Buttons -->
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                <Button Content="Cancel" Click="Cancel_Click" Width="90" Height="36"
-                        Background="#ECF0F1" Foreground="#2C3E50" Margin="0,0,10,0"
-                        BorderThickness="0"/>
-                <Button Content="Save" Click="Save_Click" Width="90" Height="36"
-                        Background="#16A085" Foreground="White" BorderThickness="0"/>
-            </StackPanel>
+            <!-- Action Buttons Footer -->
+            <Border Grid.Row="2" Background="#F8FAFC" CornerRadius="0,0,12,12"
+                    BorderBrush="#EDF0F5" BorderThickness="0,1,0,0" Padding="24,16" Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Click="Cancel_Click"
+                            Style="{StaticResource OutlineButton}" Margin="0,0,10,0"
+                            Width="90"/>
+                    <Button Content="✔  Save" Click="Save_Click"
+                            Style="{StaticResource PrimaryButton}"
+                            Width="110"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </Border>
 </Window>

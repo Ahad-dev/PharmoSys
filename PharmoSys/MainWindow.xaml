@@ -14,22 +14,27 @@
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource TextInverseBrush}"/>
-            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontFamily" Value="{StaticResource MainFont}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="24,16"/>
+            <Setter Property="Padding" Value="20,14"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="#40FFFFFF" BorderThickness="0,0,0,0"
+                                CornerRadius="8" Margin="8,2" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="{StaticResource PrimaryHoverBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="#20FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#30FFFFFF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -41,19 +46,16 @@
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="65"/>
-            <!-- Top Bar -->
             <RowDefinition Height="*"/>
-            <!-- Main Area -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <!-- Sidebar -->
+            <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="*"/>
-            <!-- Content -->
         </Grid.ColumnDefinitions>
 
         <!-- TOP BAR -->
-        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource SurfaceBrush}" BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}">
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource SurfaceBrush}"
+                BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}">
             <Border.Effect>
                 <DropShadowEffect Color="#E0E6ED" BlurRadius="5" ShadowDepth="1" Opacity="0.5" Direction="270"/>
             </Border.Effect>
@@ -64,39 +66,158 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- App Name -->
-                <TextBlock Grid.Column="0" Text="🏥 PharmoSys" Style="{StaticResource Heading2}" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="🏥 PharmoSys" Style="{StaticResource Heading2}"
+                           Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
 
-                <!-- Clock & User Info -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding CurrentDateTime}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0" FontFamily="{StaticResource MainFont}"/>
-                    <TextBlock Text="{Binding LoggedInUserName}" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center" FontFamily="{StaticResource MainFont}"/>
+                    <TextBlock Text="{Binding CurrentDateTime}" FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               VerticalAlignment="Center" Margin="0,0,20,0"
+                               FontFamily="{StaticResource MainFont}"/>
+                    <Border Background="#E8F8F5" CornerRadius="20" Padding="12,6">
+                        <TextBlock Text="{Binding LoggedInUserName}" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryBrush}"
+                                   FontFamily="{StaticResource MainFont}"/>
+                    </Border>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- SIDEBAR (Medical Green) -->
-        <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource PrimaryBrush}">
+        <!-- SIDEBAR -->
+        <Border Grid.Row="1" Grid.Column="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#0F3460" Offset="0"/>
+                    <GradientStop Color="#16A085" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Border.Effect>
-                <DropShadowEffect Color="#2C3E50" BlurRadius="10" ShadowDepth="2" Opacity="0.15" Direction="0"/>
+                <DropShadowEffect Color="#0D2137" BlurRadius="14" ShadowDepth="3" Opacity="0.3" Direction="0"/>
             </Border.Effect>
+
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Margin="0,20,0,0">
-                    <Button Content="📊 Dashboard" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowDashboardCommand}" Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="💰 POS (Billing)" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowPOSCommand}" Visibility="{Binding IsAdminOrCashier, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="💊 Products" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowProductsCommand}" Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="📦 Stock / Inventory" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowStockCommand}" Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="👥 Admin Management" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowUsersCommand}" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Content="📈 Reports" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowReportsCommand}" Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                </StackPanel>
+                <!-- Sidebar Brand Section -->
+                <Border Grid.Row="0" Padding="20,20,20,16" Margin="0,0,0,4">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="#FFFFFF" Opacity="0.12"/>
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>0,0,0,1</Border.BorderThickness>
+                    <StackPanel>
+                        <Border Background="#1ABC9C" CornerRadius="14" Width="50" Height="50"
+                                HorizontalAlignment="Left" Margin="0,0,0,12">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.2" Direction="270"/>
+                            </Border.Effect>
+                            <TextBlock Text="💊" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="PharmoSys" FontSize="17" FontWeight="Bold" Foreground="White"
+                                   FontFamily="{StaticResource MainFont}"/>
+                        <TextBlock Text="Pharmacy Management" FontSize="11" Foreground="#A8DDD4"
+                                   FontFamily="{StaticResource MainFont}" Margin="0,3,0,0"/>
+                    </StackPanel>
+                </Border>
 
-                <!-- Logout Button at bottom -->
-                <Button Grid.Row="1" Content="🚪 Logout" Style="{StaticResource SidebarButtonStyle}" Command="{Binding LogoutCommand}" Margin="0,0,0,20" Background="{StaticResource DangerBrush}"/>
+                <!-- Nav Items -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8,0,0">
+                    <StackPanel>
+                        <TextBlock Text="MAIN MENU" FontSize="10" FontWeight="Bold" Foreground="#7FD4C4"
+                                   FontFamily="{StaticResource MainFont}" Margin="28,8,0,4"/>
+
+                        <Button Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowDashboardCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📊" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Visibility="{Binding IsAdminOrCashier, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowPOSCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💰" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="POS / Billing" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowProductsCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💊" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Products" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowStockCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📦" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Stock / Inventory" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Visibility="{Binding IsAdminOrManager, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowReportsCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📈" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Reports" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Admin Section -->
+                        <TextBlock Text="ADMINISTRATION" FontSize="10" FontWeight="Bold" Foreground="#7FD4C4"
+                                   FontFamily="{StaticResource MainFont}" Margin="28,14,0,4"
+                                   Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                        <Button Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding ShowUsersCommand}" Style="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="👥" FontSize="15" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Admin Management" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Logout Button -->
+                <Border Grid.Row="2" Padding="12,12,12,16">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="#FFFFFF" Opacity="0.15"/>
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>0,1,0,0</Border.BorderThickness>
+                    <Button Command="{Binding LogoutCommand}" Cursor="Hand"
+                            BorderThickness="0" Padding="16,12">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="logoutBorder" Background="#C0392B" CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" BlurRadius="6" ShadowDepth="2" Opacity="0.15" Direction="270"/>
+                                    </Border.Effect>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="🚪" FontSize="15" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Logout" FontSize="14" FontWeight="Bold" Foreground="White"
+                                                   VerticalAlignment="Center" FontFamily="{StaticResource MainFont}"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="logoutBorder" Property="Background" Value="#A93226"/>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="logoutBorder" Property="Background" Value="#922B21"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Border>
             </Grid>
         </Border>
 
