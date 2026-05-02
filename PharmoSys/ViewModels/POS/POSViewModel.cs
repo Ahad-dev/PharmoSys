@@ -156,6 +156,9 @@ namespace PharmoSys.ViewModels.POS
             TotalAmount = CartItems.Sum(c => c.Subtotal);
             OnPropertyChanged(nameof(TotalDisplay));
         }
+
+        /// <summary>Called by the View after inline quantity edit to refresh the total.</summary>
+        public void RecalculateTotal() => CalculateTotal();
     }
 }
 

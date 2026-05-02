@@ -57,9 +57,8 @@
 
                     <TextBlock Text="Supplier *" Style="{StaticResource LabelStyle}"/>
                     <ComboBox ItemsSource="{Binding Suppliers}"
-                              SelectedValuePath="SupplierId"
                               DisplayMemberPath="SupplierName"
-                              SelectedValue="{Binding SupplierId}"/>
+                              SelectedItem="{Binding SelectedSupplier}"/>
                 </StackPanel>
             </ScrollViewer>
 

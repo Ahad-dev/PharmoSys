@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using PharmoSys.ViewModels.POS;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PharmoSys.Views.POS
 {
-    /// <summary>
-    /// Interaction logic for POSView.xaml
-    /// </summary>
     public partial class POSView : UserControl
     {
         public POSView()
         {
             InitializeComponent();
         }
+
+        private void CartDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            // After user finishes editing Qty, tell the ViewModel to recalculate the total
+            if (DataContext is POSViewModel vm)
+            {
+                // Commit the edit first, then recalculate
+                CartDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+                vm.RecalculateTotal();
+            }
+        }
     }
 }
+

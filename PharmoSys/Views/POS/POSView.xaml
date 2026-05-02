@@ -94,13 +94,15 @@
                     </Border>
 
                     <DataGrid Grid.Row="1"
+                              x:Name="CartDataGrid"
                               ItemsSource="{Binding CartItems}"
                               SelectedItem="{Binding SelectedCartItem}"
-                              AutoGenerateColumns="False" IsReadOnly="True"
+                              AutoGenerateColumns="False"
                               CanUserAddRows="False" GridLinesVisibility="Horizontal"
                               HeadersVisibility="Column" BorderThickness="0"
                               RowHeight="38" Background="White"
-                              AlternatingRowBackground="#FFF9F9">
+                              AlternatingRowBackground="#FFF9F9"
+                              CellEditEnding="CartDataGrid_CellEditEnding">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#2C3E50"/>
@@ -110,10 +112,24 @@
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Product"  Binding="{Binding Name}"     Width="*"/>
-                            <DataGridTextColumn Header="Price"    Binding="{Binding Price, StringFormat='PKR {0:N0}'}" Width="80"/>
-                            <DataGridTextColumn Header="Qty"      Binding="{Binding Quantity}"  Width="45"/>
-                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='PKR {0:N0}'}" Width="90"/>
+                            <DataGridTextColumn Header="Product"  Binding="{Binding Name}"     Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Price"    Binding="{Binding Price, StringFormat='PKR {0:N0}'}" Width="80" IsReadOnly="True"/>
+                            <!-- Qty is editable directly -->
+                            <DataGridTemplateColumn Header="Qty" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                                 BorderThickness="0" Background="#FFFBE6"
+                                                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='PKR {0:N0}'}" Width="95" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
