@@ -145,18 +145,26 @@ namespace PharmoSys.ViewModels.POS
                     bool success = await _saleService.ProcessSaleAsync(CartItems);
                     if (success)
                     {
-                        string invoice = $"--- PHARMOSYS INVOICE ---\n" +
-                                         $"Date: {System.DateTime.Now}\n" +
-                                         $"Cashier ID: {Core.Store.AppSession.CurrentUser?.Id ?? 1}\n\n";
+                        var cashierName = Core.Store.AppSession.CurrentUser?.Username ?? "Admin";
+                        
+                        // Generate PDF
+                        var pdfPath = Helpers.InvoiceGenerator.GeneratePdf(CartItems, TotalAmount, cashierName);
 
-                        foreach (var item in CartItems)
+                        var result = System.Windows.MessageBox.Show(
+                            "Checkout successful!\n\nWould you like to open the generated PDF invoice?",
+                            "Success",
+                            System.Windows.MessageBoxButton.YesNo,
+                            System.Windows.MessageBoxImage.Information);
+
+                        if (result == System.Windows.MessageBoxResult.Yes)
                         {
-                            invoice += $"{item.Name} x{item.Quantity} = PKR {item.Subtotal:N2}\n";
+                            // Open PDF with default viewer
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                            {
+                                FileName = pdfPath,
+                                UseShellExecute = true
+                            });
                         }
-                        invoice += $"\nTOTAL: PKR {TotalAmount:N2}\n-------------------------";
-
-                        MessageBox.Show($"✅ Sale completed successfully!\n\n{invoice}",
-                            "Invoice", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         ClearCart();
                         await LoadProductsAsync(); // Refresh stock in product list
