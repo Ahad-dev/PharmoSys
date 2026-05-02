@@ -76,7 +76,7 @@ namespace PharmoSys.ViewModels
         private void ShowProducts() => CurrentView = new ProductViewModel();
         private void ShowUsers() { /* To be implemented */ }
         private void ShowReports() { /* To be implemented */ }
-        private void ShowStock() { /* To be implemented */ }
+        private void ShowStock() => CurrentView = new Views.Stock.StockView();
 
         private void Logout()
         {

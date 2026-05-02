@@ -45,7 +45,7 @@ namespace PharmoSys.Services
             // 3. Prepare Entities
             var saleEntity = new SaleEntity
             {
-                UserId = AppSession.CurrentUser?.UserId ?? 1, // Fallback to 1 if not logged in during testing
+                UserId = AppSession.CurrentUser?.Id ?? 1, // Fallback to 1 if not logged in during testing
                 TotalAmount = totalAmount,
                 Discount = discount,
                 Tax = tax,

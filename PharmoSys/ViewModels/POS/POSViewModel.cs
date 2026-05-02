@@ -147,7 +147,7 @@ namespace PharmoSys.ViewModels.POS
                     {
                         string invoice = $"--- PHARMOSYS INVOICE ---\n" +
                                          $"Date: {System.DateTime.Now}\n" +
-                                         $"Cashier ID: {Core.Store.AppSession.CurrentUser?.UserId ?? 1}\n\n";
+                                         $"Cashier ID: {Core.Store.AppSession.CurrentUser?.Id ?? 1}\n\n";
 
                         foreach (var item in CartItems)
                         {
