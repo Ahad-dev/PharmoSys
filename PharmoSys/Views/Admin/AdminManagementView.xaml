@@ -1,0 +1,130 @@
+<UserControl x:Class="PharmoSys.Views.Admin.AdminManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:PharmoSys.ViewModels.Admin"
+             Background="#F5F6FA" FontFamily="Segoe UI">
+
+    <UserControl.DataContext>
+        <vm:AdminManagementViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" Padding="20,14" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Margin="0,0,0,20">
+            <StackPanel>
+                <TextBlock Text="⚙️ Admin Management" FontSize="26" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBlock Text="Manage users, suppliers, and application settings." FontSize="14" Foreground="#7F8C8D" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Tabs -->
+        <TabControl Grid.Row="1" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" Padding="10">
+            
+            <!-- USERS TAB -->
+            <TabItem Header="👥 Users" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Button Content="➕ Add User" Background="#2980B9" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="✏️ Edit" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="🗑️ Delete" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#2980B9"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="200"/>
+                            <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="250"/>
+                            <DataGridTextColumn Header="Role" Binding="{Binding Role.RoleName}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- SUPPLIERS TAB -->
+            <TabItem Header="🚚 Suppliers" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Button Content="➕ Add Supplier" Background="#16A085" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="✏️ Edit" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="🗑️ Delete" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Suppliers}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#16A085"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding SupplierId}" Width="50"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200"/>
+                            <DataGridTextColumn Header="Contact" Binding="{Binding ContactInfo}" Width="200"/>
+                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- SETTINGS TAB -->
+            <TabItem Header="🏪 Store Settings" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Invoice &amp; Report Settings" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Store Name:" VerticalAlignment="Center" Margin="0,0,20,15" FontSize="14"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StoreName}" Padding="10" Margin="0,0,0,15" FontSize="14"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Store Address:" VerticalAlignment="Top" Margin="0,5,20,15" FontSize="14"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding StoreAddress}" Padding="10" Margin="0,0,0,15" FontSize="14" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Store Contact:" VerticalAlignment="Center" Margin="0,0,20,20" FontSize="14"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding StoreContact}" Padding="10" Margin="0,0,0,20" FontSize="14"/>
+
+                    <Button Grid.Row="4" Grid.Column="1" Content="💾 Save Settings" Command="{Binding SaveSettingsCommand}" 
+                            HorizontalAlignment="Left" Background="#2C3E50" Foreground="White" FontWeight="Bold" Padding="20,10" BorderThickness="0" Cursor="Hand"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

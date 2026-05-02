@@ -76,5 +76,18 @@ namespace PharmoSys.Services
 
             return query.ToDictionary(x => x.ProductName, x => x.TotalSold);
         }
+
+        public async Task<List<SaleEntity>> GetDetailedSalesAsync(DateTime start, DateTime end)
+        {
+            using var db = new PharmoSysDbContext();
+            return await db.Sales
+                .Include(s => s.User)
+                .Include(s => s.SaleItems)
+                    .ThenInclude(si => si.Product)
+                .AsNoTracking()
+                .Where(s => s.SaleDate >= start && s.SaleDate <= end)
+                .OrderBy(s => s.SaleDate)
+                .ToListAsync();
+        }
     }
 }

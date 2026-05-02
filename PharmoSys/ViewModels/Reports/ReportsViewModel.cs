@@ -56,6 +56,8 @@ namespace PharmoSys.ViewModels.Reports
         public ObservableCollection<TopProductModel> TopProducts { get; set; }
 
         public ICommand RefreshCommand { get; }
+        public ICommand ExportPdfCommand { get; }
+        public ICommand ExportExcelCommand { get; }
 
         public ReportsViewModel()
         {
@@ -65,8 +67,46 @@ namespace PharmoSys.ViewModels.Reports
             XAxes = new ObservableCollection<Axis> { new Axis { Labels = new string[] { } } };
 
             RefreshCommand = new RelayCommand((System.Func<object, Task>)(async _ => await LoadReportDataAsync()));
+            ExportPdfCommand = new RelayCommand((System.Func<object, Task>)(async _ => await ExportReportAsync(true)));
+            ExportExcelCommand = new RelayCommand((System.Func<object, Task>)(async _ => await ExportReportAsync(false)));
 
             _ = LoadReportDataAsync();
+        }
+
+        private async Task ExportReportAsync(bool isPdf)
+        {
+            if (StartDate > EndDate) return;
+
+            try
+            {
+                var detailedSales = await _reportService.GetDetailedSalesAsync(StartDate, EndDate);
+                
+                if (!detailedSales.Any())
+                {
+                    System.Windows.MessageBox.Show("No sales data available for the selected period.", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    return;
+                }
+
+                string path;
+                if (isPdf)
+                {
+                    path = PharmoSys.Helpers.ReportExportGenerator.GeneratePdfReport(detailedSales, StartDate, EndDate);
+                }
+                else
+                {
+                    path = PharmoSys.Helpers.ReportExportGenerator.GenerateExcelReport(detailedSales, StartDate, EndDate);
+                }
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Export failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
         }
 
         private async Task LoadReportDataAsync()

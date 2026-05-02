@@ -74,7 +74,7 @@ namespace PharmoSys.ViewModels
         private void ShowDashboard() => CurrentView = new DashboardViewModel();
         private void ShowPOS() => CurrentView = new POSViewModel();
         private void ShowProducts() => CurrentView = new ProductViewModel();
-        private void ShowUsers() { /* To be implemented */ }
+        private void ShowUsers() => CurrentView = new Views.Admin.AdminManagementView();
         private void ShowReports() => CurrentView = new Views.Reports.ReportsView();
         private void ShowStock() => CurrentView = new Views.Stock.StockView();
 

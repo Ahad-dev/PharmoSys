@@ -1,4 +1,5 @@
 using PharmoSys.Core.Models;
+using PharmoSys.Services;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -18,6 +19,8 @@ namespace PharmoSys.Helpers
             var invoiceNumber = $"INV-{DateTime.Now:yyyyMMddHHmmss}";
             var filePath = Path.Combine(folderPath, $"{invoiceNumber}.pdf");
 
+            var settings = SettingsService.LoadSettings();
+
             Document.Create(container =>
             {
                 container.Page(page =>
@@ -27,7 +30,7 @@ namespace PharmoSys.Helpers
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(11).FontFamily(Fonts.Arial));
 
-                    page.Header().Element(c => ComposeHeader(c, invoiceNumber, cashierName));
+                    page.Header().Element(c => ComposeHeader(c, invoiceNumber, cashierName, settings));
                     page.Content().Element(c => ComposeContent(c, cartItems, totalAmount));
                     page.Footer().Element(ComposeFooter);
                 });
@@ -37,15 +40,15 @@ namespace PharmoSys.Helpers
             return filePath;
         }
 
-        private static void ComposeHeader(IContainer container, string invoiceNumber, string cashierName)
+        private static void ComposeHeader(IContainer container, string invoiceNumber, string cashierName, StoreSettings settings)
         {
             container.Row(row =>
             {
                 row.RelativeItem().Column(column =>
                 {
-                    column.Item().Text("PharmoSys").FontSize(24).SemiBold().FontColor(Colors.Teal.Medium);
-                    column.Item().Text("Pharmacy Management System");
-                    column.Item().Text("123 Health Ave, Medical City");
+                    column.Item().Text(settings.StoreName).FontSize(24).SemiBold().FontColor(Colors.Teal.Medium);
+                    column.Item().Text(settings.StoreAddress);
+                    column.Item().Text($"Phone: {settings.StoreContact}");
                 });
 
                 row.ConstantItem(150).Column(column =>

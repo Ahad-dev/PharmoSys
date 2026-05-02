@@ -23,6 +23,13 @@ namespace PharmoSys.Data.Repositories
                 .FirstOrDefaultAsync(u => u.Username == username);
         }
 
+        public async Task<System.Collections.Generic.List<UserEntity>> GetAllUsersAsync()
+        {
+            return await _dbContext.Users
+                .Include(u => u.Role)
+                .ToListAsync();
+        }
+
         public async Task EnsureAdminExistsAsync()
         {
             if (!await _dbContext.Roles.AnyAsync())
