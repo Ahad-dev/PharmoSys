@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PharmoSys.Data.Entities
 {
-    class SupplierEntity
+    public class SupplierEntity
     {
         [System.ComponentModel.DataAnnotations.Key]
         public int SupplierId { get; set; }
@@ -13,6 +13,6 @@ namespace PharmoSys.Data.Entities
         public string Contact { get; set; }
         public string Address { get; set; }
 
-        public ICollection<ProductEntity> Products { get; set; }
+        public virtual ICollection<ProductEntity> Products { get; set; }
     }
 }

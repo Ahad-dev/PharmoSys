@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PharmoSys.Data.Entities
 {
-    class StockHistoryEntity
+    public class StockHistoryEntity
     {
         [System.ComponentModel.DataAnnotations.Key]
         public int StockId { get; set; }
 
         public int ProductId { get; set; }
-        public ProductEntity Product { get; set; }
+        public virtual ProductEntity Product { get; set; }
 
         public string ChangeType { get; set; } // SALE / RESTOCK
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PharmoSys.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PharmoSys.Data.Context
 {
-    internal class PharmoSysDbContext:DbContext
+    public class PharmoSysDbContext : DbContext
     {
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }

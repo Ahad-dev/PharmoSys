@@ -26,6 +26,7 @@
     <Folder Include="Core\Mappers\" />
     <Folder Include="Core\Interfaces\" />
     <Folder Include="Data\Repositories\" />
+    <Folder Include="Utils\" />
     <Folder Include="ViewModels\Auth\" />
     <Folder Include="ViewModels\Stock\" />
     <Folder Include="ViewModels\Reports\" />

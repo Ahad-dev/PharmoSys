@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
 namespace PharmoSys.Data.Entities
 {
-    class UserEntity
+    public class UserEntity
     {
         [System.ComponentModel.DataAnnotations.Key]
         public int UserId { get; set; }
@@ -17,11 +17,11 @@ namespace PharmoSys.Data.Entities
         public string Phone { get; set; }
 
         public int RoleId { get; set; }
-        public RoleEntity Role { get; set; }
+        public virtual RoleEntity Role { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<SaleEntity> Sales { get; set; }
+        public virtual ICollection<SaleEntity> Sales { get; set; }
 
     }
 }

@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PharmoSys.Data.Entities
 {
-    class ProductEntity
+    public class ProductEntity
     {
         [System.ComponentModel.DataAnnotations.Key]
-
         public int ProductId { get; set; }
 
         public string Name { get; set; }
@@ -19,12 +18,12 @@ namespace PharmoSys.Data.Entities
         public DateTime? ExpiryDate { get; set; }
 
         public int SupplierId { get; set; }
-        public SupplierEntity Supplier { get; set; }
+        public virtual SupplierEntity Supplier { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<SaleItemEntity> SaleItems { get; set; }
-        public ICollection<StockHistoryEntity> StockHistories { get; set; }
+        public virtual ICollection<SaleItemEntity> SaleItems { get; set; }
+        public virtual ICollection<StockHistoryEntity> StockHistories { get; set; }
 
     }
 }

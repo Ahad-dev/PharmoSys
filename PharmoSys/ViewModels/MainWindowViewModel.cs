@@ -1,4 +1,4 @@
-﻿using PharmoSys.ViewModels.Dashboard;
+using PharmoSys.ViewModels.Dashboard;
 using PharmoSys.ViewModels.POS;
 using PharmoSys.ViewModels.Products;
 using System;
@@ -9,21 +9,14 @@ using System.Windows.Input;
 
 namespace PharmoSys.ViewModels
 {
-    internal class MainWindowViewModel:INotifyPropertyChanged
+    internal class MainWindowViewModel : BaseViewModel
     {
         private object _currentView;
 
         public object CurrentView
         {
             get { return _currentView; }
-            set
-            {
-                if (_currentView != value)
-                {
-                    _currentView = value;
-                    OnPropertyChanged(nameof(CurrentView));
-                }
-            }
+            set { SetProperty(ref _currentView, value); }
         }
         public ICommand ShowDashboardCommand { get; set; }
         public ICommand ShowPOSCommand { get; set; }
@@ -52,13 +45,6 @@ namespace PharmoSys.ViewModels
         private void ShowProducts()
         {
             CurrentView = new ProductViewModel();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

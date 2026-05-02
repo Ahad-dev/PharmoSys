@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.ServerSentEvents;
 using System.Text;
 
 namespace PharmoSys.Data.Entities
 {
-    class SaleEntity
+    public class SaleEntity
     {
         [System.ComponentModel.DataAnnotations.Key]
         public int SaleId { get; set; }
 
         public int UserId { get; set; }
-        public UserEntity User { get; set; }
+        public virtual UserEntity User { get; set; }
 
         public decimal TotalAmount { get; set; }
         public decimal Discount { get; set; }
@@ -22,6 +22,6 @@ namespace PharmoSys.Data.Entities
 
         public DateTime SaleDate { get; set; } = DateTime.Now;
 
-        public ICollection<SaleItemEntity> SaleItems { get; set; }
+        public virtual ICollection<SaleItemEntity> SaleItems { get; set; }
     }
 }
