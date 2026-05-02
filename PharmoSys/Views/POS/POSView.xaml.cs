@@ -1,5 +1,6 @@
 using PharmoSys.ViewModels.POS;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace PharmoSys.Views.POS
 {
@@ -12,14 +13,17 @@ namespace PharmoSys.Views.POS
 
         private void CartDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            // After user finishes editing Qty, tell the ViewModel to recalculate the total
-            if (DataContext is POSViewModel vm)
+            // IMPORTANT: Never call CommitEdit inside CellEditEnding — it causes WPF re-entrancy and freezes.
+            // Defer via Dispatcher.BeginInvoke so the current edit cycle completes first.
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, new System.Action(() =>
             {
-                // Commit the edit first, then recalculate
-                CartDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
-                vm.RecalculateTotal();
-            }
+                if (DataContext is POSViewModel vm)
+                {
+                    vm.RecalculateTotal();
+                }
+            }));
         }
     }
 }
+
 

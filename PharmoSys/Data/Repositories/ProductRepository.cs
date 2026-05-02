@@ -22,6 +22,7 @@ namespace PharmoSys.Data.Repositories
         public async Task<List<Product>> GetAllAsync()
         {
             var entities = await _db.Products
+                .AsNoTracking()
                 .Include(p => p.Supplier)
                 .OrderBy(p => p.Name)
                 .ToListAsync();
@@ -31,6 +32,7 @@ namespace PharmoSys.Data.Repositories
         public async Task<Product> GetByIdAsync(int productId)
         {
             var entity = await _db.Products
+                .AsNoTracking()
                 .Include(p => p.Supplier)
                 .FirstOrDefaultAsync(p => p.ProductId == productId);
             return entity?.ToModel();

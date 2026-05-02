@@ -52,12 +52,13 @@ namespace PharmoSys.ViewModels.Products
             _allProducts = new ObservableCollection<Product>();
             Products = new ObservableCollection<Product>();
 
-            AddProductCommand = new RelayCommand(_ => OpenAddDialog());
-            EditProductCommand = new RelayCommand(_ => OpenEditDialog(), _ => SelectedProduct != null);
-            DeleteProductCommand = new RelayCommand(async _ => await DeleteProductAsync(), _ => SelectedProduct != null);
-            RefreshCommand = new RelayCommand(async _ => await LoadProductsAsync());
+            AddProductCommand    = new RelayCommand((Func<object, Task>)(async _ => await OpenAddDialogAsync()));
+            EditProductCommand   = new RelayCommand((Func<object, Task>)(async _ => await OpenEditDialogAsync()), _ => SelectedProduct != null);
+            DeleteProductCommand = new RelayCommand((Func<object, Task>)(async _ => await DeleteProductAsync()), _ => SelectedProduct != null);
+            RefreshCommand       = new RelayCommand((Func<object, Task>)(async _ => await LoadProductsAsync()));
 
-            Task.Run(async () => await LoadProductsAsync());
+            // Load on startup — already on UI thread
+            _ = LoadProductsAsync();
         }
 
         public async Task LoadProductsAsync()
@@ -65,50 +66,45 @@ namespace PharmoSys.ViewModels.Products
             IsLoading = true;
             try
             {
+                // GetAllProductsAsync uses EF Core which runs async — await it directly on UI thread
                 var list = await _service.GetAllProductsAsync();
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _allProducts.Clear();
-                    foreach (var p in list) _allProducts.Add(p);
-                    FilterProducts();
-                });
+                _allProducts.Clear();
+                foreach (var p in list) _allProducts.Add(p);
+                FilterProducts();
             }
             finally { IsLoading = false; }
         }
 
         private void FilterProducts()
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Products.Clear();
-                var filtered = string.IsNullOrWhiteSpace(SearchText)
-                    ? _allProducts
-                    : _allProducts.Where(p =>
-                        p.Name.ToLower().Contains(SearchText.ToLower()) ||
-                        (p.Category?.ToLower().Contains(SearchText.ToLower()) ?? false));
+            Products.Clear();
+            var filtered = string.IsNullOrWhiteSpace(SearchText)
+                ? _allProducts
+                : _allProducts.Where(p =>
+                    p.Name.ToLower().Contains(SearchText.ToLower()) ||
+                    (p.Category?.ToLower().Contains(SearchText.ToLower()) ?? false));
 
-                foreach (var p in filtered) Products.Add(p);
-            });
+            foreach (var p in filtered) Products.Add(p);
         }
 
-        private void OpenAddDialog()
+        private async Task OpenAddDialogAsync()
         {
             var dialog = new Views.Products.ProductFormDialog();
             dialog.Owner = Application.Current.MainWindow;
             if (dialog.ShowDialog() == true)
             {
-                Task.Run(async () => await LoadProductsAsync());
+                await LoadProductsAsync(); // Immediate refresh — no Task.Run
             }
         }
 
-        private void OpenEditDialog()
+        private async Task OpenEditDialogAsync()
         {
             if (SelectedProduct == null) return;
             var dialog = new Views.Products.ProductFormDialog(SelectedProduct);
             dialog.Owner = Application.Current.MainWindow;
             if (dialog.ShowDialog() == true)
             {
-                Task.Run(async () => await LoadProductsAsync());
+                await LoadProductsAsync(); // Immediate refresh — no Task.Run
             }
         }
 
