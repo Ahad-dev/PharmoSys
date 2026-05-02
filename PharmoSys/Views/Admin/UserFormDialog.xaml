@@ -22,13 +22,16 @@
         <TextBlock Text="Full Name:" Grid.Row="2" FontWeight="SemiBold" Foreground="#2C3E50"/>
         <TextBox x:Name="txtFullName" Grid.Row="3" Margin="0,5,0,15" Padding="5"/>
 
-        <TextBlock Text="Role (1=Admin, 2=Cashier, 3=Manager):" Grid.Row="4" FontWeight="SemiBold" Foreground="#2C3E50"/>
-        <TextBox x:Name="txtRoleId" Grid.Row="5" Margin="0,5,0,15" Padding="5"/>
+        <TextBlock Text="Phone:" Grid.Row="4" FontWeight="SemiBold" Foreground="#2C3E50"/>
+        <TextBox x:Name="txtPhone" Grid.Row="5" Margin="0,5,0,15" Padding="5"/>
 
-        <TextBlock Text="Password:" Grid.Row="6" FontWeight="SemiBold" Foreground="#2C3E50"/>
-        <PasswordBox x:Name="txtPassword" Grid.Row="7" Margin="0,5,0,20" Padding="5"/>
+        <TextBlock Text="Role (1=Admin, 2=Cashier, 3=Manager):" Grid.Row="6" FontWeight="SemiBold" Foreground="#2C3E50"/>
+        <TextBox x:Name="txtRoleId" Grid.Row="7" Margin="0,5,0,15" Padding="5"/>
 
-        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Text="Password:" Grid.Row="8" FontWeight="SemiBold" Foreground="#2C3E50"/>
+        <PasswordBox x:Name="txtPassword" Grid.Row="9" Margin="0,5,0,20" Padding="5"/>
+
+        <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Cancel" Width="80" Padding="5" Margin="0,0,10,0" Click="BtnCancel_Click" Background="#E74C3C" Foreground="White" BorderThickness="0" Cursor="Hand"/>
             <Button Content="Save" Width="80" Padding="5" Click="BtnSave_Click" Background="#2ecc71" Foreground="White" BorderThickness="0" Cursor="Hand"/>
         </StackPanel>

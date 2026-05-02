@@ -16,6 +16,7 @@ namespace PharmoSys.Views.Admin
                 UserEntity = user;
                 txtUsername.Text = user.Username;
                 txtFullName.Text = user.FullName;
+                txtPhone.Text = user.Phone;
                 txtRoleId.Text = user.RoleId.ToString();
                 txtUsername.IsEnabled = false; // Cannot change username
             }
@@ -27,9 +28,12 @@ namespace PharmoSys.Views.Admin
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtFullName.Text) || string.IsNullOrWhiteSpace(txtRoleId.Text))
+            if (string.IsNullOrWhiteSpace(txtUsername.Text) || 
+                string.IsNullOrWhiteSpace(txtFullName.Text) || 
+                string.IsNullOrWhiteSpace(txtPhone.Text) ||
+                string.IsNullOrWhiteSpace(txtRoleId.Text))
             {
-                MessageBox.Show("Please fill all fields.");
+                MessageBox.Show("Please fill all required fields (Username, Full Name, Phone, Role ID).");
                 return;
             }
 
@@ -41,6 +45,7 @@ namespace PharmoSys.Views.Admin
 
             UserEntity.Username = txtUsername.Text;
             UserEntity.FullName = txtFullName.Text;
+            UserEntity.Phone = txtPhone.Text;
             UserEntity.RoleId = roleId;
 
             if (!string.IsNullOrWhiteSpace(txtPassword.Password))
