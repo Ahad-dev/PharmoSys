@@ -1,0 +1,76 @@
+<Window x:Class="PharmoSys.Views.Products.ProductFormDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding FormTitle}" Height="480" Width="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Margin" Value="0,8,0,3"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" Padding="24">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0" Text="{Binding FormTitle}" FontSize="22" FontWeight="Bold"
+                       Foreground="#16A085" Margin="0,0,0,16"/>
+
+            <!-- Form Fields -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Product Name *" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Category" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Price (PKR) *" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Stock Quantity" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Text="{Binding StockQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Expiry Date" Style="{StaticResource LabelStyle}"/>
+                    <DatePicker SelectedDate="{Binding ExpiryDate}"/>
+
+                    <TextBlock Text="Supplier *" Style="{StaticResource LabelStyle}"/>
+                    <ComboBox ItemsSource="{Binding Suppliers}"
+                              SelectedValuePath="SupplierId"
+                              DisplayMemberPath="SupplierName"
+                              SelectedValue="{Binding SupplierId}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Cancel" Click="Cancel_Click" Width="90" Height="36"
+                        Background="#ECF0F1" Foreground="#2C3E50" Margin="0,0,10,0"
+                        BorderThickness="0"/>
+                <Button Content="Save" Click="Save_Click" Width="90" Height="36"
+                        Background="#16A085" Foreground="White" BorderThickness="0"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -1,75 +1,131 @@
-﻿using PharmoSys.Commands;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Windows.Input;
+using PharmoSys.Commands;
 using PharmoSys.Core.Models;
-
+using PharmoSys.Services;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace PharmoSys.ViewModels.Products
 {
-    internal class ProductViewModel:BaseViewModel
+    internal class ProductViewModel : BaseViewModel
     {
+        private readonly ProductService _service;
+
+        private ObservableCollection<Product> _allProducts;
         public ObservableCollection<Product> Products { get; set; }
 
         private Product _selectedProduct;
         public Product SelectedProduct
         {
             get => _selectedProduct;
+            set => SetProperty(ref _selectedProduct, value);
+        }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
             set
             {
-                _selectedProduct = value;
-                OnPropertyChanged(nameof(SelectedProduct));
+                SetProperty(ref _searchText, value);
+                FilterProducts();
             }
         }
 
-        public ICommand AddProductCommand { get; set; }
-        public ICommand DeleteProductCommand { get; set; }
-        public ICommand UpdateProductCommand { get; set; }
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        public ICommand AddProductCommand { get; }
+        public ICommand EditProductCommand { get; }
+        public ICommand DeleteProductCommand { get; }
+        public ICommand RefreshCommand { get; }
 
         public ProductViewModel()
         {
+            _service = new ProductService();
+            _allProducts = new ObservableCollection<Product>();
             Products = new ObservableCollection<Product>();
 
-            LoadProducts();
+            AddProductCommand = new RelayCommand(_ => OpenAddDialog());
+            EditProductCommand = new RelayCommand(_ => OpenEditDialog(), _ => SelectedProduct != null);
+            DeleteProductCommand = new RelayCommand(async _ => await DeleteProductAsync(), _ => SelectedProduct != null);
+            RefreshCommand = new RelayCommand(async _ => await LoadProductsAsync());
 
-            AddProductCommand = new RelayCommand(AddProduct);
-            DeleteProductCommand = new RelayCommand(DeleteProduct);
-            UpdateProductCommand = new RelayCommand(UpdateProduct);
+            Task.Run(async () => await LoadProductsAsync());
         }
 
-        private void LoadProducts()
+        public async Task LoadProductsAsync()
         {
-            Products.Add(new Product
+            IsLoading = true;
+            try
             {
-                Name = "Paracetamol",
-                Price = 20,
-                Stock = 100
+                var list = await _service.GetAllProductsAsync();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _allProducts.Clear();
+                    foreach (var p in list) _allProducts.Add(p);
+                    FilterProducts();
+                });
+            }
+            finally { IsLoading = false; }
+        }
+
+        private void FilterProducts()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Products.Clear();
+                var filtered = string.IsNullOrWhiteSpace(SearchText)
+                    ? _allProducts
+                    : _allProducts.Where(p =>
+                        p.Name.ToLower().Contains(SearchText.ToLower()) ||
+                        (p.Category?.ToLower().Contains(SearchText.ToLower()) ?? false));
+
+                foreach (var p in filtered) Products.Add(p);
             });
         }
 
-        private void AddProduct(object obj)
+        private void OpenAddDialog()
         {
-            Products.Add(new Product
+            var dialog = new Views.Products.ProductFormDialog();
+            dialog.Owner = Application.Current.MainWindow;
+            if (dialog.ShowDialog() == true)
             {
-                Name = "New Medicine",
-                Price = 100,
-                Stock = 50
-            });
-        }
-
-        private void DeleteProduct(object obj)
-        {
-            if (SelectedProduct != null)
-            {
-                Products.Remove(SelectedProduct);
+                Task.Run(async () => await LoadProductsAsync());
             }
         }
 
-        private void UpdateProduct(object obj)
+        private void OpenEditDialog()
         {
-            // update logic later via service
+            if (SelectedProduct == null) return;
+            var dialog = new Views.Products.ProductFormDialog(SelectedProduct);
+            dialog.Owner = Application.Current.MainWindow;
+            if (dialog.ShowDialog() == true)
+            {
+                Task.Run(async () => await LoadProductsAsync());
+            }
+        }
+
+        private async Task DeleteProductAsync()
+        {
+            if (SelectedProduct == null) return;
+            var result = MessageBox.Show(
+                $"Delete '{SelectedProduct.Name}'? This cannot be undone.",
+                "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await _service.DeleteProductAsync(SelectedProduct.ProductId);
+                await LoadProductsAsync();
+                MessageBox.Show("Product deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }
+
