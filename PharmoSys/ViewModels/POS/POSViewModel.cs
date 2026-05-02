@@ -12,6 +12,7 @@ namespace PharmoSys.ViewModels.POS
     internal class POSViewModel : BaseViewModel
     {
         private readonly ProductService _productService;
+        private readonly SaleService _saleService;
 
         // --- Product catalogue ---
         private ObservableCollection<Product> _allProducts;
@@ -60,13 +61,15 @@ namespace PharmoSys.ViewModels.POS
         public POSViewModel()
         {
             _productService = new ProductService();
+            _saleService = new SaleService();
+
             _allProducts = new ObservableCollection<Product>();
             FilteredProducts = new ObservableCollection<Product>();
             CartItems = new ObservableCollection<CartItem>();
 
             AddToCartCommand = new RelayCommand(_ => AddToCart(), _ => SelectedProduct != null);
             RemoveItemCommand = new RelayCommand(_ => RemoveItem(), _ => SelectedCartItem != null);
-            CheckoutCommand = new RelayCommand(_ => Checkout(), _ => CartItems.Count > 0);
+            CheckoutCommand = new RelayCommand((System.Func<object, Task>)(async _ => await CheckoutAsync()), _ => CartItems.Count > 0);
             ClearCartCommand = new RelayCommand(_ => ClearCart(), _ => CartItems.Count > 0);
 
             Task.Run(async () => await LoadProductsAsync());
@@ -127,7 +130,7 @@ namespace PharmoSys.ViewModels.POS
             CalculateTotal();
         }
 
-        private void Checkout()
+        private async Task CheckoutAsync()
         {
             if (CartItems.Count == 0) return;
 
@@ -137,10 +140,32 @@ namespace PharmoSys.ViewModels.POS
 
             if (confirm == MessageBoxResult.Yes)
             {
-                // TODO: Save sale to DB in Phase 4
-                MessageBox.Show($"✅ Sale completed!\nTotal Collected: PKR {TotalAmount:N2}",
-                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                ClearCart();
+                try
+                {
+                    bool success = await _saleService.ProcessSaleAsync(CartItems);
+                    if (success)
+                    {
+                        string invoice = $"--- PHARMOSYS INVOICE ---\n" +
+                                         $"Date: {System.DateTime.Now}\n" +
+                                         $"Cashier ID: {Core.Store.AppSession.CurrentUser?.UserId ?? 1}\n\n";
+
+                        foreach (var item in CartItems)
+                        {
+                            invoice += $"{item.Name} x{item.Quantity} = PKR {item.Subtotal:N2}\n";
+                        }
+                        invoice += $"\nTOTAL: PKR {TotalAmount:N2}\n-------------------------";
+
+                        MessageBox.Show($"✅ Sale completed successfully!\n\n{invoice}",
+                            "Invoice", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        ClearCart();
+                        await LoadProductsAsync(); // Refresh stock in product list
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Checkout failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
