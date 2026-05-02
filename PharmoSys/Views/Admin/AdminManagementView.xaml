@@ -8,123 +8,112 @@
         <vm:AdminManagementViewModel/>
     </UserControl.DataContext>
 
-    <Grid Margin="20">
+    <Grid Margin="20" Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="White" Padding="20,14" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Margin="0,0,0,20">
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="20,14" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Margin="0,0,0,20">
             <StackPanel>
-                <TextBlock Text="⚙️ Admin Management" FontSize="26" FontWeight="Bold" Foreground="#2C3E50"/>
-                <TextBlock Text="Manage users, suppliers, and application settings." FontSize="14" Foreground="#7F8C8D" Margin="0,4,0,0"/>
+                <TextBlock Text="⚙️ Admin Management" Style="{StaticResource Heading2}" Foreground="{StaticResource PrimaryBrush}"/>
+                <TextBlock Text="Manage users, suppliers, and application settings." Style="{StaticResource Subtitle}" Margin="0,4,0,0"/>
             </StackPanel>
         </Border>
 
         <!-- Tabs -->
-        <TabControl Grid.Row="1" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" Padding="10">
+        <TabControl Grid.Row="1" Style="{StaticResource ModernTabControl}" Padding="0,10,0,0">
             
             <!-- USERS TAB -->
-            <TabItem Header="👥 Users" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <!-- Action Buttons -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                        <Button Content="➕ Add User" Command="{Binding AddUserCommand}" Background="#2980B9" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="✏️ Edit" Command="{Binding EditUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="🗑️ Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
-                    </StackPanel>
+            <TabItem Header="👥 Users" Style="{StaticResource ModernTabItem}">
+                <Border Style="{StaticResource ModernCard}" Margin="0,10,0,0" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <Button Content="➕ Add User" Command="{Binding AddUserCommand}" Style="{StaticResource InfoButton}" Margin="0,0,10,0"/>
+                            <Button Content="✏️ Edit" Command="{Binding EditUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Style="{StaticResource WarningButton}" Margin="0,0,10,0"/>
+                            <Button Content="🗑️ Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Style="{StaticResource DangerButton}" Margin="0,0,10,0"/>
+                            <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Style="{StaticResource OutlineButton}"/>
+                        </StackPanel>
 
-                    <DataGrid x:Name="UserGrid" Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#2980B9"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Padding" Value="10,8"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="50"/>
-                            <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="150"/>
-                            <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="200"/>
-                            <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="150"/>
-                            <DataGridTextColumn Header="Role" Binding="{Binding Role.RoleName}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
+                        <DataGrid x:Name="UserGrid" Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource ModernDataGrid}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="50"/>
+                                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="150"/>
+                                <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="200"/>
+                                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="150"/>
+                                <DataGridTextColumn Header="Role" Binding="{Binding Role.RoleName}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
             </TabItem>
 
             <!-- SUPPLIERS TAB -->
-            <TabItem Header="🚚 Suppliers" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <!-- Action Buttons -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                        <Button Content="➕ Add Supplier" Command="{Binding AddSupplierCommand}" Background="#16A085" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="✏️ Edit" Command="{Binding EditSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="🗑️ Delete" Command="{Binding DeleteSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
-                    </StackPanel>
+            <TabItem Header="🚚 Suppliers" Style="{StaticResource ModernTabItem}">
+                <Border Style="{StaticResource ModernCard}" Margin="0,10,0,0" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <Button Content="➕ Add Supplier" Command="{Binding AddSupplierCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,10,0"/>
+                            <Button Content="✏️ Edit" Command="{Binding EditSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Style="{StaticResource WarningButton}" Margin="0,0,10,0"/>
+                            <Button Content="🗑️ Delete" Command="{Binding DeleteSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Style="{StaticResource DangerButton}" Margin="0,0,10,0"/>
+                            <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Style="{StaticResource OutlineButton}"/>
+                        </StackPanel>
 
-                    <DataGrid x:Name="SupplierGrid" Grid.Row="1" ItemsSource="{Binding Suppliers}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#16A085"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Padding" Value="10,8"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding SupplierId}" Width="50"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding SupplierName}" Width="200"/>
-                            <DataGridTextColumn Header="Contact" Binding="{Binding Contact}" Width="200"/>
-                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
+                        <DataGrid x:Name="SupplierGrid" Grid.Row="1" ItemsSource="{Binding Suppliers}" Style="{StaticResource ModernDataGrid}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding SupplierId}" Width="50"/>
+                                <DataGridTextColumn Header="Name" Binding="{Binding SupplierName}" Width="200"/>
+                                <DataGridTextColumn Header="Contact" Binding="{Binding Contact}" Width="200"/>
+                                <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
             </TabItem>
 
             <!-- SETTINGS TAB -->
-            <TabItem Header="🏪 Store Settings" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50">
-                <Grid Margin="20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="400"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <TabItem Header="🏪 Store Settings" Style="{StaticResource ModernTabItem}">
+                <Border Style="{StaticResource ModernCard}" Margin="0,10,0,0" Padding="30">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="400"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Invoice &amp; Report Settings" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Invoice &amp; Report Settings" Style="{StaticResource Heading2}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,25"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Store Name:" VerticalAlignment="Center" Margin="0,0,20,15" FontSize="14"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StoreName}" Padding="10" Margin="0,0,0,15" FontSize="14"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Store Name:" VerticalAlignment="Center" Margin="0,0,20,15" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StoreName}" Style="{StaticResource ModernTextBox}" Margin="0,0,0,15"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Store Address:" VerticalAlignment="Top" Margin="0,5,20,15" FontSize="14"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding StoreAddress}" Padding="10" Margin="0,0,0,15" FontSize="14" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Store Address:" VerticalAlignment="Top" Margin="0,10,20,15" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding StoreAddress}" Style="{StaticResource ModernTextBox}" Margin="0,0,0,15" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Store Contact:" VerticalAlignment="Center" Margin="0,0,20,20" FontSize="14"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding StoreContact}" Padding="10" Margin="0,0,0,20" FontSize="14"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Store Contact:" VerticalAlignment="Center" Margin="0,0,20,25" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding StoreContact}" Style="{StaticResource ModernTextBox}" Margin="0,0,0,25"/>
 
-                    <Button Grid.Row="4" Grid.Column="1" Content="💾 Save Settings" Command="{Binding SaveSettingsCommand}" 
-                            HorizontalAlignment="Left" Background="#2C3E50" Foreground="White" FontWeight="Bold" Padding="20,10" BorderThickness="0" Cursor="Hand"/>
-                </Grid>
+                        <Button Grid.Row="4" Grid.Column="1" Content="💾 Save Settings" Command="{Binding SaveSettingsCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
             </TabItem>
         </TabControl>
     </Grid>

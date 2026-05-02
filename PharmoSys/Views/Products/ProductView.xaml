@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="900"
              FontFamily="Segoe UI">
 
-    <Grid Background="#F5F6FA">
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="White" Padding="20,14" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="20,14" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -22,80 +22,34 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="💊 Product Management" FontSize="22" FontWeight="Bold" Foreground="#16A085"/>
-                    <TextBlock Text="Add, edit, and manage all medicines and inventory." FontSize="13" Foreground="#7F8C8D" Margin="0,2,0,0"/>
+                    <TextBlock Text="💊 Product Management" Style="{StaticResource Heading2}" Foreground="{StaticResource PrimaryBrush}"/>
+                    <TextBlock Text="Add, edit, and manage all medicines and inventory." Style="{StaticResource Subtitle}" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <!-- Action Buttons -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="＋ Add Product" Command="{Binding AddProductCommand}"
-                            Background="#16A085" Foreground="White"
-                            Padding="16,8" Margin="0,0,8,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
-                    <Button Content="✏ Edit" Command="{Binding EditProductCommand}"
-                            Background="#2980B9" Foreground="White"
-                            Padding="16,8" Margin="0,0,8,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
-                    <Button Content="🗑 Delete" Command="{Binding DeleteProductCommand}"
-                            Background="#E74C3C" Foreground="White"
-                            Padding="16,8" Margin="0,0,8,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
-                    <Button Content="↻ Refresh" Command="{Binding RefreshCommand}"
-                            Background="#95A5A6" Foreground="White"
-                            Padding="16,8" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                    <Button Content="＋ Add Product" Command="{Binding AddProductCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0"/>
+                    <Button Content="✏ Edit" Command="{Binding EditProductCommand}" Style="{StaticResource InfoButton}" Margin="0,0,8,0"/>
+                    <Button Content="🗑 Delete" Command="{Binding DeleteProductCommand}" Style="{StaticResource DangerButton}" Margin="0,0,8,0"/>
+                    <Button Content="↻ Refresh" Command="{Binding RefreshCommand}" Style="{StaticResource OutlineButton}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <!-- Search Bar -->
-        <Border Grid.Row="1" Background="White" Padding="20,10" Margin="0,10,0,0">
+        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" Padding="20,10" Margin="0,10,0,0">
             <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Padding="10,8"
-                     FontSize="14"
-                     BorderBrush="#BDC3C7"
+                     Style="{StaticResource ModernTextBox}"
                      Width="320"
-                     HorizontalAlignment="Left">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="TextBox">
-                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="4" Background="White">
-                                        <Grid>
-                                            <TextBlock Text="🔍 Search by name or category..." Foreground="#BDC3C7" Padding="10,8"
-                                                       Visibility="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
-                                        </Grid>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+                     HorizontalAlignment="Left"
+                     ToolTip="Search products by name or category"/>
         </Border>
 
         <!-- Product DataGrid -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding Products}"
                   SelectedItem="{Binding SelectedProduct}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  GridLinesVisibility="Horizontal"
-                  HeadersVisibility="Column"
-                  BorderThickness="0"
-                  Background="White"
-                  RowHeight="40"
-                  Margin="0,10,0,0"
-                  AlternatingRowBackground="#F9FFFE">
-
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#16A085"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="FontSize" Value="13"/>
-                    <Setter Property="Padding" Value="12,8"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-
+                  Style="{StaticResource ModernDataGrid}"
+                  Margin="0,10,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"       Binding="{Binding ProductId}" Width="50"/>
                 <DataGridTextColumn Header="Name"     Binding="{Binding Name}" Width="180"/>
