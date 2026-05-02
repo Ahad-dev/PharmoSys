@@ -42,6 +42,14 @@ namespace PharmoSys.ViewModels.Admin
         public ICommand LoadDataCommand { get; }
         public ICommand SaveSettingsCommand { get; }
 
+        public ICommand AddUserCommand { get; }
+        public ICommand EditUserCommand { get; }
+        public ICommand DeleteUserCommand { get; }
+
+        public ICommand AddSupplierCommand { get; }
+        public ICommand EditSupplierCommand { get; }
+        public ICommand DeleteSupplierCommand { get; }
+
         public AdminManagementViewModel()
         {
             _userRepository = new UserRepository();
@@ -49,6 +57,14 @@ namespace PharmoSys.ViewModels.Admin
 
             LoadDataCommand = new RelayCommand(async _ => await LoadDataAsync());
             SaveSettingsCommand = new RelayCommand(_ => SaveSettings());
+
+            AddUserCommand = new RelayCommand(async _ => await AddUserAsync());
+            EditUserCommand = new RelayCommand(async obj => await EditUserAsync(obj as UserEntity));
+            DeleteUserCommand = new RelayCommand(async obj => await DeleteUserAsync(obj as UserEntity));
+
+            AddSupplierCommand = new RelayCommand(async _ => await AddSupplierAsync());
+            EditSupplierCommand = new RelayCommand(async obj => await EditSupplierAsync(obj as SupplierEntity));
+            DeleteSupplierCommand = new RelayCommand(async obj => await DeleteSupplierAsync(obj as SupplierEntity));
 
             _ = LoadDataAsync();
         }
@@ -82,6 +98,68 @@ namespace PharmoSys.ViewModels.Admin
             };
             SettingsService.SaveSettings(settings);
             System.Windows.MessageBox.Show("Settings saved successfully!", "Settings", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+        }
+
+        private async Task AddUserAsync()
+        {
+            var dialog = new Views.Admin.UserFormDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                await _userRepository.AddUserAsync(dialog.UserEntity);
+                await LoadDataAsync();
+            }
+        }
+
+        private async Task EditUserAsync(UserEntity user)
+        {
+            if (user == null) return;
+            var dialog = new Views.Admin.UserFormDialog(user);
+            if (dialog.ShowDialog() == true)
+            {
+                await _userRepository.UpdateUserAsync(dialog.UserEntity);
+                await LoadDataAsync();
+            }
+        }
+
+        private async Task DeleteUserAsync(UserEntity user)
+        {
+            if (user == null) return;
+            if (System.Windows.MessageBox.Show($"Are you sure you want to delete user '{user.Username}'?", "Confirm Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning) == System.Windows.MessageBoxResult.Yes)
+            {
+                await _userRepository.DeleteUserAsync(user.UserId);
+                await LoadDataAsync();
+            }
+        }
+
+        private async Task AddSupplierAsync()
+        {
+            var dialog = new Views.Admin.SupplierFormDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                await _supplierRepository.AddSupplierAsync(dialog.Supplier);
+                await LoadDataAsync();
+            }
+        }
+
+        private async Task EditSupplierAsync(SupplierEntity supplier)
+        {
+            if (supplier == null) return;
+            var dialog = new Views.Admin.SupplierFormDialog(supplier);
+            if (dialog.ShowDialog() == true)
+            {
+                await _supplierRepository.UpdateSupplierAsync(dialog.Supplier);
+                await LoadDataAsync();
+            }
+        }
+
+        private async Task DeleteSupplierAsync(SupplierEntity supplier)
+        {
+            if (supplier == null) return;
+            if (System.Windows.MessageBox.Show($"Are you sure you want to delete supplier '{supplier.SupplierName}'?", "Confirm Delete", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning) == System.Windows.MessageBoxResult.Yes)
+            {
+                await _supplierRepository.DeleteSupplierAsync(supplier.SupplierId);
+                await LoadDataAsync();
+            }
         }
     }
 }

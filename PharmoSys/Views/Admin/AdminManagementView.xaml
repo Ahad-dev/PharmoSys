@@ -35,13 +35,13 @@
                     
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                        <Button Content="➕ Add User" Background="#2980B9" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="✏️ Edit" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="🗑️ Delete" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="➕ Add User" Command="{Binding AddUserCommand}" Background="#2980B9" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="✏️ Edit" Command="{Binding EditUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="🗑️ Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding SelectedItem, ElementName=UserGrid}" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
                         <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
+                    <DataGrid x:Name="UserGrid" Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#2980B9"/>
@@ -51,7 +51,7 @@
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="50"/>
                             <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="200"/>
                             <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="250"/>
                             <DataGridTextColumn Header="Role" Binding="{Binding Role.RoleName}" Width="*"/>
@@ -70,13 +70,13 @@
                     
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                        <Button Content="➕ Add Supplier" Background="#16A085" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="✏️ Edit" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-                        <Button Content="🗑️ Delete" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="➕ Add Supplier" Command="{Binding AddSupplierCommand}" Background="#16A085" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="✏️ Edit" Command="{Binding EditSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Background="#F39C12" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+                        <Button Content="🗑️ Delete" Command="{Binding DeleteSupplierCommand}" CommandParameter="{Binding SelectedItem, ElementName=SupplierGrid}" Background="#C0392B" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
                         <Button Content="↻ Refresh" Command="{Binding LoadDataCommand}" Background="#95A5A6" Foreground="White" FontWeight="Bold" Padding="15,8" BorderThickness="0" Cursor="Hand"/>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding Suppliers}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
+                    <DataGrid x:Name="SupplierGrid" Grid.Row="1" ItemsSource="{Binding Suppliers}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="40" AlternatingRowBackground="#F9FFFE" BorderThickness="1" BorderBrush="#E0E0E0">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#16A085"/>
@@ -87,8 +87,8 @@
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding SupplierId}" Width="50"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200"/>
-                            <DataGridTextColumn Header="Contact" Binding="{Binding ContactInfo}" Width="200"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding SupplierName}" Width="200"/>
+                            <DataGridTextColumn Header="Contact" Binding="{Binding Contact}" Width="200"/>
                             <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>

@@ -30,6 +30,28 @@ namespace PharmoSys.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task AddUserAsync(UserEntity user)
+        {
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserAsync(UserEntity user)
+        {
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            var user = await _dbContext.Users.FindAsync(id);
+            if (user != null)
+            {
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task EnsureAdminExistsAsync()
         {
             if (!await _dbContext.Roles.AnyAsync())

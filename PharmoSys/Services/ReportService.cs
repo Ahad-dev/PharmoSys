@@ -51,23 +51,24 @@ namespace PharmoSys.Services
                 .ToListAsync();
         }
 
-        // For Reports View
         public async Task<List<SaleEntity>> GetSalesByDateRangeAsync(DateTime start, DateTime end)
         {
+            var endOfDay = end.Date.AddDays(1).AddTicks(-1);
             using var db = new PharmoSysDbContext();
             return await db.Sales
                 .AsNoTracking()
-                .Where(s => s.SaleDate >= start && s.SaleDate <= end)
+                .Where(s => s.SaleDate >= start.Date && s.SaleDate <= endOfDay)
                 .OrderBy(s => s.SaleDate)
                 .ToListAsync();
         }
 
         public async Task<Dictionary<string, int>> GetTopSellingProductsAsync(DateTime start, DateTime end, int count = 5)
         {
+            var endOfDay = end.Date.AddDays(1).AddTicks(-1);
             using var db = new PharmoSysDbContext();
             var query = await db.SaleItems
                 .Include(si => si.Product)
-                .Where(si => si.Sale.SaleDate >= start && si.Sale.SaleDate <= end)
+                .Where(si => si.Sale.SaleDate >= start.Date && si.Sale.SaleDate <= endOfDay)
                 .GroupBy(si => si.Product.Name)
                 .Select(g => new { ProductName = g.Key, TotalSold = g.Sum(si => si.Quantity) })
                 .OrderByDescending(x => x.TotalSold)
@@ -79,13 +80,14 @@ namespace PharmoSys.Services
 
         public async Task<List<SaleEntity>> GetDetailedSalesAsync(DateTime start, DateTime end)
         {
+            var endOfDay = end.Date.AddDays(1).AddTicks(-1);
             using var db = new PharmoSysDbContext();
             return await db.Sales
                 .Include(s => s.User)
                 .Include(s => s.SaleItems)
                     .ThenInclude(si => si.Product)
                 .AsNoTracking()
-                .Where(s => s.SaleDate >= start && s.SaleDate <= end)
+                .Where(s => s.SaleDate >= start.Date && s.SaleDate <= endOfDay)
                 .OrderBy(s => s.SaleDate)
                 .ToListAsync();
         }
